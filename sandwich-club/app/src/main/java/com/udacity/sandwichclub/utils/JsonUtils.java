@@ -26,12 +26,16 @@ public class JsonUtils {
         JSONObject sandwichJson = null;
 
         try { sandwichJson = new JSONObject(json); }
-        catch (Exception e) { return null; }
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
 
-        JSONObject mainNameObject = sandwichJson.getJSONArray(SCM_NAMELIST).getJSONObject(0);
-        returnSandwich.setMainName(mainNameObject.getString(SCM_MAINNAME));
+        //JSONObject mainNameObject = sandwichJson.getJSONArray(SCM_NAMELIST).getString(0);
+        //returnSandwich.setMainName(mainNameObject.getString(SCM_MAINNAME));
+        returnSandwich.setMainName(sandwichJson.getJSONObject(SCM_NAMELIST).getString(SCM_MAINNAME));
 
-        JSONArray akaArray = mainNameObject.getJSONArray(SCM_AKA);
+        JSONArray akaArray = sandwichJson.getJSONObject(SCM_NAMELIST).getJSONArray(SCM_AKA);
         List<String> akaNames = new ArrayList<String>();
         for (int i = 0; i < akaArray.length(); i++) {
             akaNames.add(akaArray.getString(i));

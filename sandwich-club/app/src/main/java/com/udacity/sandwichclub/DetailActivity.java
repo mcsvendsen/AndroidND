@@ -11,18 +11,23 @@ import com.udacity.sandwichclub.model.Sandwich;
 import com.udacity.sandwichclub.utils.JsonUtils;
 
 import org.json.JSONException;
+import android.databinding.DataBindingUtil;
+import com.udacity.sandwichclub.databinding.ActivityDetailBinding;
 
 public class DetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_POSITION = "extra_position";
     private static final int DEFAULT_POSITION = -1;
 
+    ActivityDetailBinding dBinding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        ImageView ingredientsIv = findViewById(R.id.image_iv);
+        ImageView ingredientsIv = (ImageView) findViewById(R.id.image_iv);
+        dBinding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
 
         Intent intent = getIntent();
         if (intent == null) {
@@ -40,16 +45,20 @@ public class DetailActivity extends AppCompatActivity {
         String json = sandwiches[position];
         Sandwich sandwich = null;
         try { sandwich = JsonUtils.parseSandwichJson(json); }
-        catch (JSONException e) { return; }
+        catch (JSONException e) {
+            e.printStackTrace();
+            return;
+        }
         if (sandwich == null) {
             // Sandwich data unavailable
             closeOnError();
             return;
         }
 
-        populateUI();
+        populateUI(sandwich);
+        //TEST CODE - WILL BE DELETED ingredientsIv.setImageResource(R.mipmap.ic_launcher);
         Picasso.with(this)
-                .load(sandwich.getImage())
+                .load(R.mipmap.ic_launcher)
                 .into(ingredientsIv);
 
         setTitle(sandwich.getMainName());
@@ -60,7 +69,29 @@ public class DetailActivity extends AppCompatActivity {
         Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
     }
 
-    private void populateUI() {
+    private void populateUI(Sandwich sandwich) {
 
+        dBinding.descriptionTv.setText(sandwich.getDescription());
+
+        StringBuilder akaText = new StringBuilder();
+        if (sandwich.getAlsoKnownAs().size() > 0) {
+            for (int i = 0; i < sandwich.getAlsoKnownAs().size(); i++) {
+                akaText.append(sandwich.getAlsoKnownAs().get(i));
+                if (i < (sandwich.getAlsoKnownAs().size() - 1)) akaText.append(", ");
+            }
+        }else akaText.append("N/A");
+        dBinding.alsoKnownTv.setText(akaText.toString());
+
+        StringBuilder ingredientsText = new StringBuilder();
+        if (sandwich.getIngredients().size() > 0) {
+            for (int i = 0; i < sandwich.getIngredients().size(); i++) {
+                ingredientsText.append(sandwich.getIngredients().get(i));
+                if (i != (sandwich.getIngredients().size() - 1)) ingredientsText.append(", ");
+            }
+        }else ingredientsText.append("Unknown");
+        dBinding.ingredientsTv.setText(ingredientsText.toString());
+
+        if (sandwich.getPlaceOfOrigin().isEmpty()) dBinding.originTv.setText("Unknown");
+        else dBinding.originTv.setText(sandwich.getPlaceOfOrigin());
     }
 }
