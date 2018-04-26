@@ -60,7 +60,7 @@ public class DetailActivity extends AppCompatActivity {
         //TEST CODE - WILL BE DELETED     .placeholder(R.drawable.loading)
         Picasso.with(this)
                 .load(sandwich.getImage())
-                .into(ingredientsIv);
+                .into(dBinding.imageIv);
 
         setTitle(sandwich.getMainName());
     }
