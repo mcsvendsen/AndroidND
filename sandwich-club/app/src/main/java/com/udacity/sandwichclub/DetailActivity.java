@@ -59,7 +59,7 @@ public class DetailActivity extends AppCompatActivity {
         //TEST CODE - WILL BE DELETED ingredientsIv.setImageResource(R.mipmap.ic_launcher);
         //TEST CODE - WILL BE DELETED     .placeholder(R.drawable.loading)
         Picasso.with(this)
-                .load(R.mipmap.ic_launcher_round)
+                .load(sandwich.getImage())
                 .into(ingredientsIv);
 
         setTitle(sandwich.getMainName());
