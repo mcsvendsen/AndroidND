@@ -57,8 +57,9 @@ public class DetailActivity extends AppCompatActivity {
 
         populateUI(sandwich);
         //TEST CODE - WILL BE DELETED ingredientsIv.setImageResource(R.mipmap.ic_launcher);
+        //TEST CODE - WILL BE DELETED     .placeholder(R.drawable.loading)
         Picasso.with(this)
-                .load(R.mipmap.ic_launcher)
+                .load(R.mipmap.ic_launcher_round)
                 .into(ingredientsIv);
 
         setTitle(sandwich.getMainName());
